@@ -13,10 +13,15 @@ import { ref } from 'vue';
 
 const password = ref('');
 
-function onSubmit() {
+async function onSubmit() {
   const pwd = (password.value || '').trim();
   if (pwd) {
-    console.log(pwd)
+    const formData = new FormData();
+    formData.append('password', pwd);
+    const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`; 
+    const response = await fetch(postUrl, { method: 'POST', body: formData });
+    const result = await response.json();
+    console.log(result);
   }
 }
 </script>
