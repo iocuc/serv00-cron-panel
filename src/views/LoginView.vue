@@ -1,7 +1,6 @@
 <template>
   <div class="login-page">
     <form class="login-form" @keyup.enter="onSubmit" @submit.prevent>
-      {{ subPwd }}
       <input v-model="password" type="password" >
       <button type="button" @click="onSubmit">确定</button>
     </form>
@@ -11,9 +10,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import useHttp from '@/composables/useHttp';
 
 const password = ref('');
-const subPwd = ref('')
 
 async function onSubmit() {
   const pwd = (password.value || '').trim();
@@ -21,9 +20,8 @@ async function onSubmit() {
     const formData = new FormData();
     formData.append('password', pwd);
     const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`;
-    const response = await fetch(postUrl, { method: 'POST', body: formData });
-    const result = await response.json();
-    subPwd.value = result.pwd || '';
+    const result = await useHttp('post', postUrl, formData);
+    console.log(result);
   }
 }
 </script>
