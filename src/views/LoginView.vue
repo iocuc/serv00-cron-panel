@@ -1,27 +1,29 @@
 <template>
   <div class="login-page">
     <form class="login-form" @keyup.enter="onSubmit" @submit.prevent>
+      {{ subPwd }}
       <input v-model="password" type="password" >
       <button type="button" @click="onSubmit">确定</button>
     </form>
   </div>
-  
+
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
 const password = ref('');
+const subPwd = ref('')
 
 async function onSubmit() {
   const pwd = (password.value || '').trim();
   if (pwd) {
     const formData = new FormData();
     formData.append('password', pwd);
-    const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`; 
+    const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`;
     const response = await fetch(postUrl, { method: 'POST', body: formData });
     const result = await response.json();
-    console.log(result);
+    subPwd.value = result.pwd || '';
   }
 }
 </script>
