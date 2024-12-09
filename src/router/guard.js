@@ -1,5 +1,6 @@
+// 前置路由守卫
 export default function(router) {
-  router.beforeEach(async (to, from) => {
+  router.beforeEach(async (to) => {
     const canAccess = await canUserAccess(to);
     if (!canAccess) return '/login';
   });
