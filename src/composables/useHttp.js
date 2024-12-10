@@ -1,4 +1,4 @@
-export default async function useHttp(method, url, params) {
+async function useHttp(method, url, params) {
   try {
     let response;
     const reqMethod = method.toUpperCase();
@@ -19,3 +19,15 @@ export default async function useHttp(method, url, params) {
     throw new Error(error);
   }
 }
+
+async function useKeepHttp(method, url, params = {}) {
+  try {
+    const baseUrl = import.meta.env.VITE_KEEP_API;
+    const reqUrl = url.replace(/^\/|\/$/g, ''); // 去掉开头和结尾的'/'
+    return await useHttp(method, `${baseUrl}/${reqUrl}`, params);
+  } catch(e) {
+    throw new Error(e);
+  }
+}
+
+export { useKeepHttp }

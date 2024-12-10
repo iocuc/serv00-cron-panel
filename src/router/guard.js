@@ -11,7 +11,6 @@ export default function(router) {
       return true;
     }
 
-    console.log(to)
  // const isAuthenticated = checkAuthentication();
     const isAuthenticated = false;
 

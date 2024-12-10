@@ -5,23 +5,30 @@
       <button type="button" @click="onSubmit">确定</button>
     </form>
   </div>
-
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import useHttp from '@/composables/useHttp';
+import { useKeepHttp } from '@/composables/useHttp';
 
 const password = ref('');
+const loading = ref(false);
+
 const router = useRouter();
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 async function onSubmit() {
   const pwd = (password.value || '').trim();
   if (!pwd) return;
-  const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`;
-  const result = await useHttp('post', postUrl, { password: pwd });
-  if (result.code || !result.data) return;
+  loading.value = true;
+  const res = await useKeepHttp('post', '/api/login', { password: pwd });
+  await delay(2000);
+  loading.value = false;
+  if (loading.value || res.code || !res.data) return;
   router.push({ name: 'home' });
 }
 </script>
