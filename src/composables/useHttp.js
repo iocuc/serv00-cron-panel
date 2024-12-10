@@ -4,7 +4,8 @@ export default async function useHttp(method, url, params) {
     const reqMethod = method.toUpperCase();
 
     if (reqMethod === 'POST') {
-      response = await fetch(url, { method: reqMethod, body: params, credentials: 'include' });
+      const reqParams = JSON.stringify(params);
+      response = await fetch(url, { method: reqMethod, body: reqParams, credentials: 'include' });
     } else if (reqMethod === 'GET') {
       const urlParams = new URLSearchParams(params);
       const fullUrl = `${url}?${urlParams.toString()}`;

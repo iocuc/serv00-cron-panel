@@ -10,19 +10,19 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import useHttp from '@/composables/useHttp';
 
 const password = ref('');
+const router = useRouter();
 
 async function onSubmit() {
   const pwd = (password.value || '').trim();
-  if (pwd) {
-    const formData = new FormData();
-    formData.append('password', pwd);
-    const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`;
-    const result = await useHttp('post', postUrl, formData);
-    console.log(result);
-  }
+  if (!pwd) return;
+  const postUrl = `${import.meta.env.VITE_KEEP_API}/api/login`;
+  const result = await useHttp('post', postUrl, { password: pwd });
+  if (result.code || !result.data) return;
+  router.push({ name: 'home' });
 }
 </script>
 
